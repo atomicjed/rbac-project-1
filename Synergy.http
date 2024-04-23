@@ -1,0 +1,6 @@
+@Synergy_HostAddress = http://localhost:5224
+
+GET {{Synergy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
