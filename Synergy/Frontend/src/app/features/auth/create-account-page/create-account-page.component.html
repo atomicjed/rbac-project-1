@@ -1,0 +1,61 @@
+<div class="w-full h-full flex flex-col items-center justify-center py-8">
+  <h1 class="text-[1.5rem] font-medium py-6">Create your Account</h1>
+  <div class="border-b border-b-[#eee] w-full mb-12"></div>
+  <div hlmCard class="shadow-lg">
+    <div hlmCardHeader>
+      <h3 class="text-[1.3rem]" hlmCardTitle>Create an account</h3>
+      <p hlmCardDescription>Open the gate to the glory days</p>
+      <form (ngSubmit)="createAccount()" [formGroup]="form">
+        <div class="pl-0 pb-0 pt-[15px] gap-[5px] flex flex-col" hlmCardContent>
+          <label hlmLabel>Name/Nickname
+            <input class="w-80" formControlName="name" appCodeValidator hlmInput placeholder="Name" type="text">
+            <div class="flex flex-col">
+              <small *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched"
+                     class="text-red-600 font-medium text-[0.8rem]">
+                *Name cannot be empty
+              </small>
+              <small *ngIf="form.get('name')?.errors?.['codeTag'] || form.get('name')?.errors?.['codeTag']"
+                     class="text-red-600 font-medium text-[0.8rem]">
+                *Name contains potentially harmful script
+              </small>
+            </div>
+          </label>
+          <label hlmLabel>Email address
+            <input class="w-80" formControlName="email" appEmailValidator appCodeValidator hlmInput placeholder="Email address" type="email">
+            <div class="flex flex-col">
+              <small *ngIf="form.get('email')?.errors?.['emailError'] && form.get('email')?.touched"
+                     class="text-red-600 font-medium text-[0.8rem]">
+                *Email not in correct format
+              </small>
+              <small *ngIf="form.get('email')?.errors?.['codeTag'] && form.get('email')?.touched"
+                     class="text-red-600 font-medium text-[0.8rem]">
+                *Email contains potentially harmful script
+              </small>
+            </div>
+          </label>
+          <label hlmLabel>Password
+            <input class="w-80" formControlName="password" appPasswordValidator appCodeValidator hlmInput placeholder="Password" type="password">
+            <div class="w-72">
+            <small *ngIf="form.get('password')?.errors?.['invalidPassword'] && form.get('password')?.touched"
+                   class="text-red-600 font-medium text-[0.8rem] mx-w-[200px]">
+              *Password must be between 12 and 128 characters long and contain at least one letter, digit and special character.
+            </small>
+              <small *ngIf="form.get('password')?.errors?.['codeTag'] && form.get('password')?.touched"
+                     class="text-red-600 font-medium text-[0.8rem] mx-w-[200px]">
+                *Password contains harmful script
+              </small>
+            </div>
+          </label>
+          <div class="mt-[20px]">
+          <label hlmLabel class="p-2">Select your role
+            <div class="pt-[5px]"><app-dropdown (selectedRole)="handleSelectedRole($event)"></app-dropdown></div>
+          </label>
+          </div>
+          <div class="pl-0 pt-2" hlmCardFooter>
+            <button [disabled]="!form.valid || role === ''" class="text-green-300 bg-blue-800" hlmBtn id="signUpButton" type="submit">Create Account</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

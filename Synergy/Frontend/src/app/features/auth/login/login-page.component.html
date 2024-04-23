@@ -1,0 +1,56 @@
+<div class="w-full h-full flex flex-col items-center justify-center py-8">
+  <h1 class="text-[1.5rem] font-medium py-6">Sign in or Register</h1>
+  <div class="border-b border-b-[#eee] w-full mb-12"></div>
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h3 class="text-[1.3rem]" hlmCardTitle>Sign in</h3>
+      <form (ngSubmit)="onLogIn()" [formGroup]="form">
+        <div class="pl-0 pb-0 pt-[15px] gap-[5px] flex flex-col" hlmCardContent>
+          <label hlmLabel>Email address
+            <input class="w-80" formControlName="email" appEmailValidator appCodeValidator hlmInput placeholder="Email address" type="email">
+            <div class="flex flex-col">
+              <small *ngIf="form.get('email')?.errors?.['emailError'] && form.get('email')?.touched"
+                     class="px-2 text-red-600 font-medium text-[0.8rem]">
+                *Email not in correct format
+              </small>
+              <small *ngIf="form.get('email')?.errors?.['codeTag']"
+                     class="px-2 text-red-600 font-medium text-[0.8rem]">
+                *Email contains potentially harmful script
+              </small>
+            </div>
+          </label>
+          <label hlmLabel>Password
+            <input class="w-80" formControlName="password" appCodeValidator hlmInput placeholder="Password" type="password">
+            <small *ngIf="form.get('password')?.errors?.['required'] && form.get('password')?.touched"
+                   class="px-2 text-red-600 font-medium text-[0.8rem]">
+              *Password cannot be empty
+            </small>
+            <small *ngIf="form.get('password')?.errors?.['codeTag']"
+                   class="px-2 text-red-600 font-medium text-[0.8rem]">
+              *Password contains harmful script
+            </small>
+          </label>
+          <div class="pl-0 pt-2" hlmCardFooter>
+            <button [disabled]="!form.valid" class="text-green-300 bg-blue-800" hlmBtn id="logInButton" type="submit">Log in</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div class="mt-6 mb-4 w-80 h-10 flex justify-between">
+    <div class="border-t w-[40%] border-t-[#eee] mt-[13px]"></div>
+    <div>Or</div>
+    <div class="border-t w-[40%] border-t-[#eee] mt-[13px]"></div>
+  </div>
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h3 class="1.3rem]" hlmCardTitle>Don't have an account?</h3>
+      <p hlmCardDescription>Open the gate to a successful season!</p>
+      <div class="pl-0 pb-0 pt-[15px] gap-[5px] flex flex-col" hlmCardContent>
+        <a [routerLink]="'create-account'">
+          <button class="w-80" hlmBtn>Create Account</button>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

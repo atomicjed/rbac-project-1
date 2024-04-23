@@ -1,0 +1,24 @@
+# Ignore node modules (dependencies)
+node_modules/
+
+angular/
+
+# Ignore build output directory
+dist/
+
+# Ignore IDE or editor-specific files
+.idea/
+.vscode/
+
+# Ignore environment-specific or user-specific configuration files
+*.env
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+.tmp/
+
+# Ignore dependency lock files (optional, depends on project setup)
+package-lock.json
+yarn.lock

@@ -1,0 +1,6 @@
+<div class="bg-[#0c246a] text-[#20f9c3] w-full sticky top-0 flex justify-between px-12 py-4">
+  <a [routerLink]="''">
+  <div class="text-[1.5rem] font-medium hover:cursor-pointer transition duration-300 ease-in-out hover:text-[#0dbf92]">Synergy</div>
+  </a>
+  <button *ngIf="user" hlmBtn (click)="logOut()">Log out</button>
+</div>
