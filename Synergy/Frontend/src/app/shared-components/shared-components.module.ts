@@ -30,12 +30,20 @@ import {
   HlmSubMenuComponent
 } from "@spartan-ng/ui-menu-helm";
 import {DropdownComponent} from "./dropdown/dropdown.component";
-
-
+import {CodeValidatorDirective} from "./directives/validators/code-validator.directive";
+import {EmailValidatorDirective} from "./directives/validators/email-validator.directive";
+import {PasswordValidatorDirective} from "./directives/validators/password-validator.directive";
+import {XssValidatorDirective} from "./directives/validators/xss-validator.directive";
+import { CanRegisterTeamDirective } from './directives/conditional-statements/can-register-team.directive';
 
 @NgModule({
   declarations: [
     DropdownComponent,
+    CodeValidatorDirective,
+    EmailValidatorDirective,
+    PasswordValidatorDirective,
+    XssValidatorDirective,
+    CanRegisterTeamDirective
   ],
   imports: [
     CommonModule,
@@ -115,6 +123,11 @@ import {DropdownComponent} from "./dropdown/dropdown.component";
     HlmMenuItemCheckboxDirective,
     HlmMenuItemRadioDirective,
     DropdownComponent,
+    CodeValidatorDirective,
+    EmailValidatorDirective,
+    PasswordValidatorDirective,
+    XssValidatorDirective,
+    CanRegisterTeamDirective,
   ]
 })
 export class SharedComponentsModule { }

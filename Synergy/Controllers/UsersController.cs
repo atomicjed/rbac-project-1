@@ -22,8 +22,8 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await _usersService.AddUser(newUser);
-            return Ok();
+            var permissions = await _usersService.AddUser(newUser);
+            return Ok(permissions);
         }
         catch 
         {

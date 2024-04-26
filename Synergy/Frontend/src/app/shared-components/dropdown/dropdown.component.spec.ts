@@ -8,6 +8,8 @@ describe('DropdownComponent', () => {
   let component: DropdownComponent;
   let fixture: ComponentFixture<DropdownComponent>;
 
+  let spy: jasmine.Spy;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DropdownComponent,],
@@ -24,9 +26,23 @@ describe('DropdownComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('toggle role button clickable', () => {
+  it('should be able to click toggle role button', () => {
     const toggleButton = fixture.nativeElement.querySelector('#toggleButton');
     toggleButton.click();
     fixture.detectChanges();
+  });
+
+  it('should set chosen role to manager', () => {
+    component.setToManager();
+    fixture.detectChanges();
+    expect(component.chosenRole).toBe('Manager');
+  });
+
+  it('should emit chosen role', () => {
+    component.setToPlayer();
+    fixture.detectChanges();
+    component.selectedRole.subscribe(selectedRole => {
+      expect(selectedRole).toBe('Player');
+    })
   })
 });

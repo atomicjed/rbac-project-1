@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import firebase from "firebase/compat";
 import User = firebase.User;
 import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
-import {GetUserService} from "../../../services/api-requests/users/get-user.service";
+import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
 
 @Component({
   selector: 'app-login-page',
@@ -13,12 +13,12 @@ import {GetUserService} from "../../../services/api-requests/users/get-user.serv
 export class LoginPageComponent implements OnDestroy {
   user: User | null = null;
   role: string = '';
-  constructor(private firebaseAuthService: FirebaseAuthService, private formBuilder: FormBuilder, private getUserService: GetUserService) {
+  constructor(private firebaseAuthService: FirebaseAuthService, private customFormBuilder: CustomFormBuilder) {
   }
   userSubscription = this.firebaseAuthService.currentUser$.subscribe(user => {
   this.user = user;
   })
-  form = this.formBuilder.group({
+  form = this.customFormBuilder.group({
     email: ['', [Validators.required]],
     password: ['', [Validators.required]]
   })
@@ -48,13 +48,5 @@ export class LoginPageComponent implements OnDestroy {
     } catch (error) {
       console.log("Error signing up", error)
     }
-  }
-
-  getUser() {
-    const userId = this.user?.uid;
-    if (userId)
-      this.getUserService.getUser(userId).subscribe(res => {
-        console.log(res);
-      })
   }
 }

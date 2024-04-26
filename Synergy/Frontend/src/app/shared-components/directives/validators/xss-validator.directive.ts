@@ -3,11 +3,15 @@ import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator, ValidatorFn
 
 export const xssValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const invalid = /<script.*?>|<\/script.*?>/gis.test(control.value);
-  return invalid ? { xss: true } : null;
+  if (invalid) {
+    return { xss: true };
+  } else {
+    return null;
+  }
 };
 
 @Directive({
-  selector: '[xssValidator][formControlName],[xssValidator][formControl],[xssValidator][ngModel]',
+  selector: '[xssValidator],[xssValidator][formControlName],[xssValidator][formControl],[xssValidator][ngModel]',
   providers: [
     {
       provide: NG_VALIDATORS,

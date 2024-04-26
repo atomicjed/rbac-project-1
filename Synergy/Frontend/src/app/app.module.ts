@@ -11,6 +11,7 @@ import {SharedComponentsModule} from "./shared-components/shared-components.modu
 import {LayoutModule} from "./features/layout/layout.module";
 import {AuthModule} from "./features/auth/auth.module";
 import {ServicesModule} from "./services/services.module";
+import {HomePageModule} from "./features/home-page/home-page.module";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {ServicesModule} from "./services/services.module";
     ServicesModule,
     AuthModule,
     LayoutModule,
+    HomePageModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireModule,

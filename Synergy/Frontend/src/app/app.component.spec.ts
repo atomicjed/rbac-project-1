@@ -3,26 +3,23 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import {AuthService} from "@auth0/auth0-angular";
 import {InjectionToken} from "@angular/core";
+import {NavbarComponent} from "./features/layout/navbar/navbar.component";
+import {FirebaseAuthService} from "./services/auth/firebase-auth.service";
+import {MockFirebaseAuthService} from "../mocks/mock-firebase-auth";
 
-
-const auth0ClientToken = new InjectionToken<any>('auth0.client');
 
 describe('AppComponent', () => {
-
-  const authServiceMock = {
-    loginWithRedirect: () => {}
-  }
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       providers:[
-        { provide: AuthService, useValue: authServiceMock },
-        { provide: auth0ClientToken, useValue: {} }
+        {provide: FirebaseAuthService, useClass: MockFirebaseAuthService}
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        NavbarComponent
       ],
     }).compileComponents();
   });

@@ -3,9 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {API_ROOT} from "../../../../constants/constants";
 import {catchError, throwError} from "rxjs";
 
-interface User {
+interface NewUser {
   userId: string | undefined,
-  name: string,
   role: string;
 }
 @Injectable({
@@ -15,13 +14,8 @@ export class AddUserService {
 
   constructor(private http: HttpClient) { }
 
-  addNewUser(newUser: User) {
+  addNewUser(newUser: NewUser) {
     const url = `${API_ROOT}Users/add-user`;
-    this.http.post(url, newUser).pipe(
-      catchError((error) => {
-        console.log('Error:', error);
-        throw error;
-      })
-    ).subscribe();
+    return this.http.post(url, newUser);
   }
 }

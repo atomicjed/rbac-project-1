@@ -17,10 +17,12 @@
 
     <ItemGroup>
       <Folder Include="Frontend\src\app\features\auth\" />
+      <Folder Include="Frontend\src\app\features\home-page\components\" />
+      <Folder Include="Frontend\src\app\guards\" />
       <Folder Include="Frontend\src\app\services\api-requests\users\" />
       <Folder Include="Frontend\src\app\services\auth\" />
       <Folder Include="Frontend\src\app\services\interceptor\" />
-      <Folder Include="Frontend\src\app\shared-components\" />
+      <Folder Include="Frontend\src\app\shared-components\directives\conditional-statements\" />
     </ItemGroup>
 
 </Project>

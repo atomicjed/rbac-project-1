@@ -1,44 +1,43 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat";
-import User = firebase.User;
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, map, Observable, Subscription, switchMap, tap} from "rxjs";
+import {GetUserPermissionsService} from "../api-requests/users/get-user-permissions.service";
+import {AddUserService} from "../api-requests/users/add-user.service";
 
+interface User {
+  userId: string,
+  role: string,
+}
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseAuthService implements OnDestroy {
-  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
-  constructor(private afAuth: AngularFireAuth) {
+  private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
+  private currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  currentUser$: Observable<any> = this.currentUserSubject.asObservable();
+  constructor(private afAuth: AngularFireAuth, private getUserPermissionsService: GetUserPermissionsService, private addUserService: AddUserService) {
   }
 
-  currentUserSubscription = this.afAuth.authState.subscribe((user: User | null) => {
-  this.currentUserSubject.next(user);
-})
+  currentUserSubscription = this.afAuth.authState.pipe(
+    tap(user => this.currentUserSubject.next(user)),
+    switchMap(user => user !== null ? [true] : [false]),
+    tap(isAuthenticated => this.isAuthenticatedSubject.next(isAuthenticated))
+  ).subscribe();
+
   ngOnDestroy() {
     this.currentUserSubscription?.unsubscribe();
   }
 
   signUp(email: string, password: string) {
-    return new Promise<string>((resolve, reject) => {
-      this.afAuth.createUserWithEmailAndPassword(email, password)
-        .then((userCredentials) => {
-          const userId = userCredentials.user?.uid;
-          if (userId) {
-            resolve(userId);
-          } else {
-            reject(new Error('User ID not found'));
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    })
+      return this.afAuth.createUserWithEmailAndPassword(email, password);
   }
+
   login(email: string, password: string) {
-    this.afAuth.signInWithEmailAndPassword(email, password).then(() => {
-      // Login successful
+    this.afAuth.signInWithEmailAndPassword(email, password).then(userCredentials => {
+      if (userCredentials.user?.uid)
+        this.getUserPermissionsService.getUserPermissions(userCredentials.user?.uid);
     })
       .catch((error) => {
         console.log("Incorrect email or password")
@@ -53,9 +52,12 @@ export class FirebaseAuthService implements OnDestroy {
       });
   }
 
+  isAuthenticated(): Observable<boolean> {
+    return this.isAuthenticated$;
+  }
   getToken(): Promise<string | null> {
     return this.afAuth.currentUser.then(user => {
-      if (user) {
+        if (user){
         return user.getIdToken();
       } else {
         return null;

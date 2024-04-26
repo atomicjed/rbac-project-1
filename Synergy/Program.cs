@@ -43,6 +43,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoDatabase"));
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<EncryptionService>();
+builder.Services.AddScoped<PermissionsService>();
+builder.Services.AddScoped<RolesService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

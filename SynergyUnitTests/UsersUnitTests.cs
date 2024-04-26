@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MongoDB.Driver;
 using Synergy.Models;
+using Synergy.Services;
 
 namespace SynergyUnitTests;
 
@@ -9,73 +10,50 @@ public class UsersUnitTests
 {
     private IMongoDatabase _testDatabase;
     private IMongoCollection<Users> _usersCollection;
+    private PermissionsService _permissionsService;
+    private IMongoCollection<Permissions> _permissionsCollection;
     [SetUp]
     public void Setup()
     {
         var client = new MongoClient("mongodb://localhost:27017");
         _testDatabase = client.GetDatabase("SynergyTest");
         _usersCollection = _testDatabase.GetCollection<Users>("UsersTest");
+        _permissionsCollection = _testDatabase.GetCollection<Permissions>("PermissionsTest");
     }
+    
 
     [Test]
     public async Task Test_AddUser()
     {
         var user = new Users
         {
-            UserId = "USER_ID",
-            Name = "Ricky",
+            UserId = "USER_ID_2",
             Role = "Manager"
         };
-        var encrypted = EncryptionHelper.Encrypt(user.Name);
-        var decrypted = EncryptionHelper.Decrypt(encrypted);
-        Console.WriteLine("decryptedName:", decrypted);
-        var newUser = new Users
-        {
-            UserId = user.UserId,
-            Name = encrypted,
-            Role = user.Role
-        };
-        Console.WriteLine("encryptedName:", encrypted);
-        await AddUser(newUser, decrypted);
-
+        var permissions = await AddUser(user);
         var filter = Builders<Users>.Filter.Eq(x => x.UserId, "USER_ID");
         var addedUser = await _usersCollection.Find(filter).FirstOrDefaultAsync();
+        string[] expectedPermissions = ["can-register-team", "can-assign-trainer", "can-create-plan"];
         Assert.That(addedUser, Is.Not.Null);
         Assert.That(addedUser.Role, Is.EqualTo("Manager"));
+        Assert.That(permissions, Is.EqualTo(expectedPermissions));
     }
 
-    public async Task AddUser(Users newUser, string decryptedName)
+    public async Task<string[]> AddUser(Users user)
     {
-        
-        await _usersCollection.InsertOneAsync(newUser);
-        var newUser2 = new Users
-        {
-            UserId = newUser.UserId,
-            Name = decryptedName,
-            Role = newUser.Role
-        };
-        await _usersCollection.InsertOneAsync(newUser2);
+        await _usersCollection.InsertOneAsync(user);
+        return await GetUserPermissions(user.UserId);
     }
-
-    [Test]
-    public async Task Test_GetUser()
+    
+    public async Task<string[]> GetUserPermissions(string userId)
     {
-        var userId = "USER_ID";
-        var user = await GetUser(userId);
-        Assert.That(user.Name, Is.EqualTo("Ricky"));
-    }
-    public async Task<Users> GetUser(string userId)
-    {
-        var dbUser = await _usersCollection.Find(x => x.UserId == userId).FirstOrDefaultAsync();
-        var encrypted = EncryptionHelper.Encrypt("Ricky");
-        var decryptedName = EncryptionHelper.Decrypt(dbUser.Name);
-        var user = new Users
-        {
-            UserId = dbUser.UserId,
-            Name = decryptedName,
-            Role = dbUser.Role
-        };
-        return user;
+        var userFilter = Builders<Users>.Filter.Eq(x => x.UserId, userId);
+        var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
+        var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, user.Role);
+        var projectName = Builders<Permissions>.Projection.Include(x => x.PermissionName);
+        var permissions = _permissionsCollection.Find(permissionFilter).Project(projectName).ToList();
+        var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();
+        return permissionNames;
     }
 
     public static class EncryptionHelper
