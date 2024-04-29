@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using System.Security.Cryptography;
 using System.Text;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using Synergy.Models;
 using Synergy.Services;
@@ -9,7 +11,7 @@ namespace SynergyUnitTests;
 public class UsersUnitTests
 {
     private IMongoDatabase _testDatabase;
-    private IMongoCollection<Users> _usersCollection;
+    private IMongoCollection<User> _usersCollection;
     private PermissionsService _permissionsService;
     private IMongoCollection<Permissions> _permissionsCollection;
     [SetUp]
@@ -17,7 +19,7 @@ public class UsersUnitTests
     {
         var client = new MongoClient("mongodb://localhost:27017");
         _testDatabase = client.GetDatabase("SynergyTest");
-        _usersCollection = _testDatabase.GetCollection<Users>("UsersTest");
+        _usersCollection = _testDatabase.GetCollection<User>("UsersTest");
         _permissionsCollection = _testDatabase.GetCollection<Permissions>("PermissionsTest");
     }
     
@@ -25,13 +27,13 @@ public class UsersUnitTests
     [Test]
     public async Task Test_AddUser()
     {
-        var user = new Users
+        var user = new UserFromBody
         {
-            UserId = "USER_ID_2",
+            UserId = "USER_ID",
             Role = "Manager"
         };
         var permissions = await AddUser(user);
-        var filter = Builders<Users>.Filter.Eq(x => x.UserId, "USER_ID");
+        var filter = Builders<User>.Filter.Eq(x => x.UserId, "USER_ID");
         var addedUser = await _usersCollection.Find(filter).FirstOrDefaultAsync();
         string[] expectedPermissions = ["can-register-team", "can-assign-trainer", "can-create-plan"];
         Assert.That(addedUser, Is.Not.Null);
@@ -39,17 +41,37 @@ public class UsersUnitTests
         Assert.That(permissions, Is.EqualTo(expectedPermissions));
     }
 
-    public async Task<string[]> AddUser(Users user)
+    public async Task<string[]> AddUser(UserFromBody userFromBody)
     {
+        var permissions = await GetPermissionsFromRole(userFromBody.Role);
+        var user = new User
+        {
+            UserId = userFromBody.UserId,
+            Role = userFromBody.Role,
+            Permissions = permissions
+        };
         await _usersCollection.InsertOneAsync(user);
-        return await GetUserPermissions(user.UserId);
+        return permissions;
     }
-    
+
+    [Test]
+    public async Task Test_GetUserPermissions()
+    {
+        var userId = "USER_ID";
+        var permissions = await GetUserPermissions(userId);
+        string[] expectedPermissions = ["can-register-team", "can-assign-trainer", "can-create-plan"];
+        Assert.That(permissions, Is.EqualTo(expectedPermissions));
+    }
     public async Task<string[]> GetUserPermissions(string userId)
     {
-        var userFilter = Builders<Users>.Filter.Eq(x => x.UserId, userId);
+        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
         var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
-        var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, user.Role);
+        return user.Permissions;
+    }
+
+    public async Task<string[]> GetPermissionsFromRole(string role)
+    {
+        var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, role);
         var projectName = Builders<Permissions>.Projection.Include(x => x.PermissionName);
         var permissions = _permissionsCollection.Find(permissionFilter).Project(projectName).ToList();
         var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();

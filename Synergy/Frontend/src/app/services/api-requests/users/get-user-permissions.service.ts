@@ -15,7 +15,10 @@ export class GetUserPermissionsService {
 
   getUserPermissions(userId: string) {
     const url = `${API_ROOT}Permissions/get-user-permissions`;
-    return this.http.post(url, {userId}).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(url, {userId}, { headers, withCredentials: true }).pipe(
       tap(permissions => {
         const permissionsArray = Object.values(permissions);
         this.userPermissionBehaviorSubject.next(permissionsArray);

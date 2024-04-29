@@ -7,7 +7,7 @@ public class PermissionsUnitTests
 {
     private IMongoDatabase _testDatabase;
     private IMongoCollection<Permissions> _permissionsCollection;
-    private IMongoCollection<Users> _usersCollection;
+    private IMongoCollection<User> _usersCollection;
 
     [SetUp]
     public void Setup()
@@ -15,7 +15,7 @@ public class PermissionsUnitTests
         var client = new MongoClient("mongodb://localhost:27017");
         _testDatabase = client.GetDatabase("SynergyTest");
         _permissionsCollection = _testDatabase.GetCollection<Permissions>("PermissionsTest");
-        _usersCollection = _testDatabase.GetCollection<Users>("UsersTest");
+        _usersCollection = _testDatabase.GetCollection<User>("UsersTest");
     }
 
     [Test]
@@ -29,7 +29,7 @@ public class PermissionsUnitTests
 
     public async Task<string[]> GetUserPermissions(string userId)
     {
-        var userFilter = Builders<Users>.Filter.Eq(x => x.UserId, userId);
+        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
         var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
         var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, user.Role);
         var projectName = Builders<Permissions>.Projection.Include(x => x.PermissionName);

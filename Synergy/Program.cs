@@ -12,14 +12,16 @@ builder.Services.AddCors(options =>
         {
             build.WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
     options.AddPolicy("AllowProductionOrigin",
         build =>
         {
             build.WithOrigins("https://synergy")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         }
     );
 });
@@ -53,10 +55,6 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseCors("AllowProductionOrigin");
-app.UseAuthentication();
-app.UseAuthorization();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -65,7 +63,10 @@ if (app.Environment.IsDevelopment())
     app.MapControllers().RequireCors("AllowDevOrigin");
 }
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
+//app.UseHttpsRedirection();
 
 
 app.Run();

@@ -18,11 +18,11 @@ public class UsersController : ControllerBase
     }
     
     [HttpPost("add-user")]
-    public async Task<IActionResult> AddUser([FromBody] Users newUser)
+    public async Task<IActionResult> AddUser([FromBody] UserFromBody userFromBody)
     {
         try
         {
-            var permissions = await _usersService.AddUser(newUser);
+            var permissions = await _usersService.AddUser(userFromBody);
             return Ok(permissions);
         }
         catch 
