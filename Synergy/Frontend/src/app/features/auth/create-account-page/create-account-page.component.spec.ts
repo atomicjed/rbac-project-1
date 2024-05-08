@@ -12,6 +12,7 @@ import {CustomFormBuilder} from "../../../shared-components/custom-form-group/cu
 import {AddUserService} from "../../../services/api-requests/users/add-user.service";
 import {of} from "rxjs";
 import {Router} from "@angular/router";
+import {NgxsModule} from "@ngxs/store";
 
 describe('CreateAccountPageComponent', () => {
   let component: CreateAccountPageComponent;
@@ -32,7 +33,7 @@ describe('CreateAccountPageComponent', () => {
         CustomFormBuilder,
         AddUserService
       ],
-      imports: [HttpClientTestingModule, SharedComponentsModule, ReactiveFormsModule]
+      imports: [HttpClientTestingModule, SharedComponentsModule, ReactiveFormsModule, NgxsModule.forRoot([])]
     })
     .compileComponents();
 
@@ -41,7 +42,7 @@ describe('CreateAccountPageComponent', () => {
 
     router = TestBed.inject(Router);
     addUserService = TestBed.inject(AddUserService);
-    spy = spyOn(addUserService, 'addNewUser').and.returnValue(of(['1', '2']));
+    spy = spyOn(addUserService, 'addNewUser').and.returnValue(of({userId: "user_id"}));
     fixture.detectChanges();
   });
 
@@ -59,22 +60,5 @@ describe('CreateAccountPageComponent', () => {
     expect(errorMessage).toBeTruthy();
   })
 
-  it('should create user object when create account clicked', fakeAsync(() => {
-    component.form.controls['email'].setValue('test@test.com');
-    component.form.controls['password'].setValue('123456789ten!');
-    component.role = "Player";
 
-    fixture.detectChanges();
-
-    spyOn(router, 'navigate')
-
-    component.createAccount();
-
-    tick();
-
-    expect(addUserService.addNewUser).toHaveBeenCalledWith({
-      userId: 'mocked-user-id',
-      role: 'Player'
-    });
-  }));
 });

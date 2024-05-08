@@ -8,6 +8,9 @@
 
     <ItemGroup>
         <PackageReference Include="FirebaseAdmin" Version="2.4.1" />
+        <PackageReference Include="Hangfire" Version="1.8.12" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
+        <PackageReference Include="Hangfire.Mongo" Version="1.10.6" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2"/>
         <PackageReference Include="MongoDB.Bson" Version="2.25.0" />
@@ -17,11 +20,15 @@
 
     <ItemGroup>
       <Folder Include="Frontend\src\app\features\auth\" />
-      <Folder Include="Frontend\src\app\features\home-page\components\" />
-      <Folder Include="Frontend\src\app\guards\" />
+      <Folder Include="Frontend\src\app\features\register-team\components\dropdown-components\" />
+      <Folder Include="Frontend\src\app\features\team-pages\team-home-page\components\" />
+      <Folder Include="Frontend\src\app\features\team-pages\team-invite-pages\components\" />
+      <Folder Include="Frontend\src\app\services\api-requests\random-codes\" />
+      <Folder Include="Frontend\src\app\services\api-requests\teams\" />
       <Folder Include="Frontend\src\app\services\api-requests\users\" />
       <Folder Include="Frontend\src\app\services\auth\" />
       <Folder Include="Frontend\src\app\services\interceptor\" />
+      <Folder Include="Frontend\src\app\services\teams\" />
       <Folder Include="Frontend\src\app\shared-components\directives\conditional-statements\" />
     </ItemGroup>
 

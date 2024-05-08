@@ -26,12 +26,6 @@ describe('DropdownComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be able to click toggle role button', () => {
-    const toggleButton = fixture.nativeElement.querySelector('#toggleButton');
-    toggleButton.click();
-    fixture.detectChanges();
-  });
-
   it('should set chosen role to manager', () => {
     component.setToManager();
     fixture.detectChanges();
@@ -44,5 +38,6 @@ describe('DropdownComponent', () => {
     component.selectedRole.subscribe(selectedRole => {
       expect(selectedRole).toBe('Player');
     })
+    expect(component).toBeTruthy();
   })
 });

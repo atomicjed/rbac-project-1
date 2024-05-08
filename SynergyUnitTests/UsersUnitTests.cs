@@ -29,8 +29,8 @@ public class UsersUnitTests
     {
         var user = new UserFromBody
         {
-            UserId = "USER_ID",
-            Role = "Manager"
+            UserId = "USER_ID2",
+            Role = "Player"
         };
         var permissions = await AddUser(user);
         var filter = Builders<User>.Filter.Eq(x => x.UserId, "USER_ID");
@@ -48,7 +48,8 @@ public class UsersUnitTests
         {
             UserId = userFromBody.UserId,
             Role = userFromBody.Role,
-            Permissions = permissions
+            Permissions = permissions,
+            Teams = []
         };
         await _usersCollection.InsertOneAsync(user);
         return permissions;
@@ -76,6 +77,21 @@ public class UsersUnitTests
         var permissions = _permissionsCollection.Find(permissionFilter).Project(projectName).ToList();
         var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();
         return permissionNames;
+    }
+
+    [Test]
+    public async Task Test_AddTeamIdToUser()
+    {
+        var userId = "USER_ID2";
+        var teamId = "team-id";
+        await AddTeamIdToUser(userId, teamId);
+    }
+    public async Task AddTeamIdToUser(string userId, string teamId)
+    {
+        Console.WriteLine("Received User ID:" + userId, "Received TeamID: " + teamId);
+        var filter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+        var update = Builders<User>.Update.AddToSet("Teams", teamId);
+        await _usersCollection.UpdateOneAsync(filter, update);
     }
 
     public static class EncryptionHelper

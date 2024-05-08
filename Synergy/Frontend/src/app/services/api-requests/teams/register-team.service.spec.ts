@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GetUserPermissionsService } from './get-user-permissions.service';
+import { RegisterTeamService } from './register-team.service';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
-describe('GetUserPermissionsService', () => {
-  let service: GetUserPermissionsService;
+describe('RegisterTeamService', () => {
+  let service: RegisterTeamService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
-    service = TestBed.inject(GetUserPermissionsService);
+    service = TestBed.inject(RegisterTeamService);
   });
 
   it('should be created', () => {

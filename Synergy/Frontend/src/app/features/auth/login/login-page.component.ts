@@ -4,6 +4,7 @@ import firebase from "firebase/compat";
 import User = firebase.User;
 import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
 import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
+import {GetUserService} from "../../../services/api-requests/users/get-user.service";
 
 @Component({
   selector: 'app-login-page',
@@ -13,15 +14,15 @@ import {CustomFormBuilder} from "../../../shared-components/custom-form-group/cu
 export class LoginPageComponent implements OnDestroy {
   user: User | null = null;
   role: string = '';
-  constructor(private firebaseAuthService: FirebaseAuthService, private customFormBuilder: CustomFormBuilder) {
+  constructor(private firebaseAuthService: FirebaseAuthService, private customFormBuilder: CustomFormBuilder, private getUserService: GetUserService) {
   }
   userSubscription = this.firebaseAuthService.currentUser$.subscribe(user => {
   this.user = user;
-  })
+  });
   form = this.customFormBuilder.group({
     email: ['', [Validators.required]],
     password: ['', [Validators.required]]
-  })
+  });
 
   ngOnDestroy() {
     this.userSubscription?.unsubscribe();
@@ -32,7 +33,12 @@ export class LoginPageComponent implements OnDestroy {
   }
 
   login(email: string, password: string) {
-    this.firebaseAuthService.login(email, password);
+    this.firebaseAuthService.login(email, password).then(userCredentials => {
+      if (userCredentials.user?.uid)
+      {
+        this.getUserService.getUserInfo(userCredentials.user?.uid);
+      }
+    });
   }
 
   logout() {

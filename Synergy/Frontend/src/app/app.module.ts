@@ -12,6 +12,15 @@ import {LayoutModule} from "./features/layout/layout.module";
 import {AuthModule} from "./features/auth/auth.module";
 import {ServicesModule} from "./services/services.module";
 import {HomePageModule} from "./features/home-page/home-page.module";
+import {RegisterTeamModule} from "./features/register-team/register-team.module";
+import {NgxsModule} from "@ngxs/store";
+import {NgxsReduxDevtoolsPluginModule} from "@ngxs/devtools-plugin";
+import {UserState} from "./store/states/user.state";
+import { TeamHomePageComponent } from './features/team-pages/team-home-page/components/team-home-page/team-home-page.component';
+import {TeamPagesModule} from "./features/team-pages/team-pages.module";
+import {TeamsState} from "./store/states/teams.state";
+import { provideFirestore, getFirestore} from "@angular/fire/firestore";
+import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 
 @NgModule({
   declarations: [
@@ -26,9 +35,14 @@ import {HomePageModule} from "./features/home-page/home-page.module";
     AuthModule,
     LayoutModule,
     HomePageModule,
+    TeamPagesModule,
+    RegisterTeamModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireModule,
+    AngularFirestoreModule,
+    provideFirestore(() => getFirestore()),
+    NgxsModule.forRoot([UserState, TeamsState]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
   providers: [
     {

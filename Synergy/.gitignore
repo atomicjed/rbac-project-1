@@ -5,6 +5,8 @@ obj/
 # Ignore node modules (for Angular frontend)
 node_modules/
 
+.angular
+
 # Ignore Visual Studio files
 .vs/
 

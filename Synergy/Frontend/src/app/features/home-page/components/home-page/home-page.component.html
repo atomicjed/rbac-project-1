@@ -1,8 +1,2 @@
-<app-login-page *ngIf="!user"></app-login-page>
-<div *ngIf="user">
-  <div *appCanRegisterTeam="permissions">Register Team!</div>
-  <div *ngFor="let permission of permissions">
-    <div>{{permission}}</div>
-  </div>
-  <button hlmBtn (click)="isAuthenticated()">Try navigate to create account</button>
-</div>
+<app-hero-section *ngIf="userId && userId !== ''"></app-hero-section>
+<app-login-page *ngIf="!userId || userId === ''"></app-login-page>

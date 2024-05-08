@@ -2,6 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import firebase from "firebase/compat";
 import User = firebase.User;
 import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,7 @@ import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service"
 })
 export class NavbarComponent implements OnDestroy{
   user: User | null = null;
-  constructor(private firebaseAuthService: FirebaseAuthService) {
+  constructor(private firebaseAuthService: FirebaseAuthService, private router: Router) {
   }
   userSubscription = this.firebaseAuthService.currentUser$.subscribe(user => {
     this.user = user;
@@ -21,6 +22,8 @@ export class NavbarComponent implements OnDestroy{
   }
 
   logOut() {
-    this.firebaseAuthService.logout();
+    this.router.navigate(['']).then(() => {
+      this.firebaseAuthService.logout();
+    })
   }
 }

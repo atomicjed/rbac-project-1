@@ -12,6 +12,9 @@
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
         <PackageReference Include="FirebaseAdmin" Version="2.4.1" />
+        <PackageReference Include="Hangfire" Version="1.8.12" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
+        <PackageReference Include="Hangfire.Mongo" Version="1.10.6" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
         <PackageReference Include="MongoDB.Bson" Version="2.25.0" />

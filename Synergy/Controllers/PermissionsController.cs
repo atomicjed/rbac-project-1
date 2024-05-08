@@ -30,24 +30,5 @@ public class PermissionsController : ControllerBase
             return StatusCode(500, "Internal server error when adding permission");
         }
     }
-
-    [HttpPost("get-user-permissions")]
-    public async Task<IActionResult> GetPermission([FromBody] UserIdBody body)
-    {
-        try
-        {
-            var userId = body.UserId;
-            var permissions = await _permissionsService.GetUserPermissions(userId);
-            return Ok(permissions);
-        }
-        catch
-        {
-            return StatusCode(500, "Internal server error when getting permission");
-        }
-    }
-
-    public record UserIdBody
-    {
-        public string UserId { get; set; } = null!;
-    }
+    
 }

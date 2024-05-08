@@ -1,0 +1,8 @@
+<div class="w-[100vw] h-[95vh] flex flex-col items-center">
+  <div *ngIf="codeIsValid === null">loading...</div>
+  <app-accept-invite-sign-in *ngIf="codeIsValid"></app-accept-invite-sign-in>
+  <div *ngIf="!codeIsValid" class="w-full h-[90%] flex flex-col items-center justify-center">
+    <div class="font-medium text-[1.3rem] py-2">Your invite code has expired or does not exist</div>
+    <p>Please contact your manager to re-invite you</p>
+  </div>
+</div>

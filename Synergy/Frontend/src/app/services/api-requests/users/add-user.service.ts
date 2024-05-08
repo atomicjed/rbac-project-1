@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {API_ROOT} from "../../../../constants/constants";
-import {catchError, throwError} from "rxjs";
+import {Observable} from "rxjs";
 
 interface NewUser {
   userId: string | undefined,
@@ -14,8 +14,8 @@ export class AddUserService {
 
   constructor(private http: HttpClient) { }
 
-  addNewUser(newUser: NewUser) {
+  addNewUser(newUser: NewUser):Observable<{ userId: string }> {
     const url = `${API_ROOT}Users/add-user`;
-    return this.http.post(url, newUser);
+    return this.http.post<{ userId: string }>(url, newUser);
   }
 }

@@ -9,6 +9,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 import {CustomFormBuilder} from "../../../../shared-components/custom-form-group/custom-form-group";
+import {NgxsModule} from "@ngxs/store";
 
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
@@ -17,7 +18,7 @@ describe('HomePageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HomePageComponent, LoginPageComponent],
-      imports: [ HttpClientTestingModule, ReactiveFormsModule, RouterTestingModule],
+      imports: [ HttpClientTestingModule, ReactiveFormsModule, RouterModule.forRoot([]), NgxsModule.forRoot([])],
       providers: [
         { provide: FirebaseAuthService, useClass: MockFirebaseAuthService },
         CustomFormBuilder

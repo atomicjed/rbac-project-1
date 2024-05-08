@@ -22,12 +22,27 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var permissions = await _usersService.AddUser(userFromBody);
-            return Ok(permissions);
+            var userId = await _usersService.AddUser(userFromBody);
+            return Ok(new { userId });
         }
         catch 
         {
             return StatusCode(500, $"Internal server error when adding user");
+        }
+    }
+    
+    [HttpPost("get-user-info")]
+    public async Task<IActionResult> GetUserInfo([FromBody] UserIdBody body)
+    {
+        try
+        {
+            var userId = body.UserId;
+            var user = await _usersService.GetUserInfo(userId);
+            return Ok(user);
+        }
+        catch
+        {
+            return StatusCode(500, "Internal server error when getting permission");
         }
     }
 
@@ -43,5 +58,10 @@ public class UsersController : ControllerBase
         {
             return StatusCode(500, "Error getting user");
         }
+    }
+    
+    public record UserIdBody
+    {
+        public string UserId { get; set; } = null!;
     }
 }

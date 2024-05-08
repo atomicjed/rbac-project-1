@@ -31,10 +31,4 @@ public class PermissionsService
         var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();
         return permissionNames;
     }
-    public async Task<string[]> GetUserPermissions(string userId)
-    {
-        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
-        var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
-        return user.Permissions;
-    }
 }

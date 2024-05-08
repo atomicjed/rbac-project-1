@@ -3,7 +3,7 @@ import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 
 export function xssValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const invalid = /<script.*?>|<\/script.*?>/gis.test(control.value);
+    const invalid = /<script.*?>|<\/script.*?>|{|}|;|(\$|\$where|db\.|db\..*\.|\$\$.*\$|\\)|\.\.\/|\/\.\.|\/\/|\|/gi.test(control.value);
     return invalid ? { xss: true } : null;
   };
 }

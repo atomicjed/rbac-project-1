@@ -7,6 +7,10 @@ import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
 import {By} from "@angular/platform-browser";
 import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterModule} from "@angular/router";
+import {AddUserService} from "../../../services/api-requests/users/add-user.service";
+import {NgxsModule, Store} from "@ngxs/store";
 
 
 describe('LoginPageComponent', () => {
@@ -22,9 +26,11 @@ describe('LoginPageComponent', () => {
       declarations: [LoginPageComponent],
       providers: [
         { provide: FirebaseAuthService, useClass: MockFirebaseAuthService },
-        CustomFormBuilder
+        CustomFormBuilder,
+        Store,
+        AddUserService
       ],
-      imports: [ReactiveFormsModule, RouterTestingModule]
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), HttpClientTestingModule, NgxsModule.forRoot([])]
     })
     .compileComponents();
 

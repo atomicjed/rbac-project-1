@@ -14,7 +14,7 @@ export const isNotAuthenticatedGuard: CanActivateFn = (route, state): MaybeAsync
   return authService.isAuthenticated$.pipe(
     map(isAuthenticated => {
       if(isAuthenticated) {
-        router.navigate(['']);
+        router.navigate(['']).then();
         return false;
       } else {
         return true;
