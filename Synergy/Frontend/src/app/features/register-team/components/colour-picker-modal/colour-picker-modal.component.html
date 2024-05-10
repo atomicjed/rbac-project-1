@@ -1,0 +1,25 @@
+<div hlmCard class="px-8 py-4 rounded-none">
+  <div hlmCardHeader>
+    <h1 hlmCardTitle class="text-center text-[1.3rem]">Pick you Colours</h1>
+    <p hlmCardDescription class="text-center">Wear them with pride!</p>
+  </div>
+  <div hlmCardContent>
+    <form (ngSubmit)="saveColours()" [formGroup]="form">
+    <div class="flex gap-[25px] mt-[15px]">
+      <label class="flex flex-col items-center justify-center" hlmLabel>Primary Colour
+        <div class="border border-[#eee] mt-[10px] rounded-md p-2 ">
+          <input formControlName="primaryColour" class="h-[30px] w-[30px] rounded-md hover:cursor-pointer" type="color">
+        </div>
+      </label>
+      <label class="flex flex-col items-center justify-center" hlmLabel>Secondary Colour
+        <div class="border border-[#eee] mt-[10px] rounded-md p-2">
+          <input formControlName="secondaryColour" class="appearance-none w-8 h-8 border rounded-md hover:cursor-pointer" type="color">
+        </div>
+      </label>
+    </div>
+    <div hlmCardFooter class="flex items-center justify-center mt-[15px]">
+      <button type="submit" hlmBtn [ngStyle]="getButtonColour()">Save</button>
+    </div>
+    </form>
+  </div>
+</div>

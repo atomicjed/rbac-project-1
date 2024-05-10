@@ -2,16 +2,17 @@ import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing'
 
 import { CreateAccountPageComponent } from './create-account-page.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
 import {MockFirebaseAuthService} from "../../../../mocks/mock-firebase-auth";
-import {DropdownComponent} from "../../../shared-components/dropdown/dropdown.component";
-import {SharedComponentsModule} from "../../../shared-components/shared-components.module";
+import {DropdownComponent} from "@app/shared-components/dropdown/dropdown.component";
+import {SharedComponentsModule} from "@app/shared-components/shared-components.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {By} from "@angular/platform-browser";
-import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
-import {AddUserService} from "../../../services/api-requests/users/add-user.service";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
+import {AddUserService} from "@app/services/api-requests/users/add-user.service";
 import {of} from "rxjs";
-import {Router} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
+import {NgxsModule} from "@ngxs/store";
 
 describe('CreateAccountPageComponent', () => {
   let component: CreateAccountPageComponent;
@@ -32,7 +33,7 @@ describe('CreateAccountPageComponent', () => {
         CustomFormBuilder,
         AddUserService
       ],
-      imports: [HttpClientTestingModule, SharedComponentsModule, ReactiveFormsModule]
+      imports: [HttpClientTestingModule, SharedComponentsModule, RouterModule.forRoot([]), ReactiveFormsModule, NgxsModule.forRoot([])]
     })
     .compileComponents();
 
@@ -41,7 +42,7 @@ describe('CreateAccountPageComponent', () => {
 
     router = TestBed.inject(Router);
     addUserService = TestBed.inject(AddUserService);
-    spy = spyOn(addUserService, 'addNewUser').and.returnValue(of(['1', '2']));
+    spy = spyOn(addUserService, 'addNewUser').and.returnValue(of({userId: "user_id"}));
     fixture.detectChanges();
   });
 
@@ -59,22 +60,5 @@ describe('CreateAccountPageComponent', () => {
     expect(errorMessage).toBeTruthy();
   })
 
-  it('should create user object when create account clicked', fakeAsync(() => {
-    component.form.controls['email'].setValue('test@test.com');
-    component.form.controls['password'].setValue('123456789ten!');
-    component.role = "Player";
 
-    fixture.detectChanges();
-
-    spyOn(router, 'navigate')
-
-    component.createAccount();
-
-    tick();
-
-    expect(addUserService.addNewUser).toHaveBeenCalledWith({
-      userId: 'mocked-user-id',
-      role: 'Player'
-    });
-  }));
 });

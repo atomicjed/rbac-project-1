@@ -1,0 +1,18 @@
+<div class="w-full h-[90vh] flex flex-col items-center justify-center">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label hlmLabel>User's Email
+    <input hlmInput formControlName="email" appEmailValidator placeholder="User email" class="w-80">
+    <div class="flex flex-col">
+      <small *ngIf="form.get('email')?.errors?.['emailError'] && form.get('email')?.touched" class="text-red-600 text-[0.8rem]">
+        *Email not in correct format
+      </small>
+      <small *ngIf="form.get('email')?.errors?.['xss']" class="text-red-600 text-[0.8rem]">
+        *Email contains harmful script
+      </small>
+    </div>
+  </label>
+  <div>
+    <button hlmBtn type="submit">Send Invitation</button>
+  </div>
+</form>
+</div>

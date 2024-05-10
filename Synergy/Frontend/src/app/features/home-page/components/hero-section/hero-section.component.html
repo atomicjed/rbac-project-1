@@ -1,0 +1,14 @@
+<div class="h-[80vh] w-[100vw] flex items-center justify-center gap-[50px]">
+  <div class="flex flex-col gap-[15px]">
+    <h2 class="text-[2.5rem] text-[#0c246a] font-bold">{{ heroTitle }}</h2>
+    <p>{{ heroText }}</p>
+    <div class="flex gap-[10px]">
+      <button hlmBtn (click)="navigateToTeamsPage()">My Teams</button>
+      <button (click)="onButtonClick()" class="bg-white text-[#0c245a] border border-[#0c245a] hover:text-white"
+              hlmBtn id="dynamic-button">{{ heroBtn }}
+      </button>
+    </div>
+  </div>
+  <div>
+  </div>
+</div>

@@ -7,4 +7,6 @@ public class DatabaseSettings
     public string UsersCollectionName { get; set; } = null!;
     public string PermissionsCollectionName { get; set; } = null!;
     public string RolesCollectionName { get; set; } = null!;
+    public string TeamsCollectionName { get; set; } = null!;
+    public string RandomCodesCollectionName { get; set; } = null!;
 }

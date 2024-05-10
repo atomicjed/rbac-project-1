@@ -21,29 +21,18 @@ public class UsersService
         _encryptionService = new EncryptionService();
         _permissionsService = new PermissionsService(databaseSettings);
     }
-
-    public async Task<string[]> AddUser(UserFromBody userFromBody)
-    {
-        var permissions = await _permissionsService.GetPermissionsFromRole(userFromBody.Role);
-        var user = new User
-        {
-            UserId = userFromBody.UserId,
-            Role = userFromBody.Role,
-            Permissions = permissions
-        };
-        await _usersCollection.InsertOneAsync(user);
-        return permissions;
-    }
     
-
-    public async Task<User> GetUser(string userId)
+    public async Task<User> GetUserInfo(string userId)
     {
-        var dbUser = await _usersCollection.Find(x => x.UserId == userId).FirstOrDefaultAsync();
-        var user = new User
-        {
-            UserId = dbUser.UserId,
-            Role = dbUser.Role
-        };
+        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+        var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
         return user;
+    }
+
+    public async Task AddTeamIdToUser(string userId, string teamId)
+    {
+        var filter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+        var update = Builders<User>.Update.AddToSet("Teams", teamId);
+        await _usersCollection.UpdateOneAsync(filter, update);
     }
 }

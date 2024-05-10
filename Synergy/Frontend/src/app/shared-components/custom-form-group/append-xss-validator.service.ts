@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {xssValidator} from "../../services/validators/validators.service";
+import {xssValidator} from "@app/services/validators/validators.service";
 
 export class AppendFormValidators {
   static appendXssValidatorToControls(form: FormGroup): void {

@@ -1,10 +1,14 @@
 using System.Collections.Immutable;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
+using Synergy.Configurations;
+using Synergy.Features.Users.UserControllers;
 using Synergy.Models;
 using Synergy.Services;
+using Synergy.Validators;
 
 namespace SynergyUnitTests;
 
@@ -14,6 +18,8 @@ public class UsersUnitTests
     private IMongoCollection<User> _usersCollection;
     private PermissionsService _permissionsService;
     private IMongoCollection<Permissions> _permissionsCollection;
+    private UserIdInputValidator _userIdInputValidator;
+
     [SetUp]
     public void Setup()
     {
@@ -21,16 +27,38 @@ public class UsersUnitTests
         _testDatabase = client.GetDatabase("SynergyTest");
         _usersCollection = _testDatabase.GetCollection<User>("UsersTest");
         _permissionsCollection = _testDatabase.GetCollection<Permissions>("PermissionsTest");
+        _userIdInputValidator = new UserIdInputValidator();
     }
-    
+
+    [Test]
+    public async Task Test_GetUserInfo()
+    {
+        var body = new UserIdInput
+        {
+            UserId = "USER_ID"
+        };
+        var user = await GetUserInfo(body);
+        Assert.That(user.Role, Is.EqualTo("Manager"));
+    }
+    public async Task<User> GetUserInfo(UserIdInput body)
+    {
+        var results = await Task.Run(() => _userIdInputValidator.Validate(body));
+        if (!results.IsValid)
+            return null;
+        var userId = body.UserId;
+        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+        var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
+        Console.WriteLine(user.Role);
+        return user;
+    }
 
     [Test]
     public async Task Test_AddUser()
     {
-        var user = new UserFromBody
+        var user = new UserFromBodyInput
         {
-            UserId = "USER_ID",
-            Role = "Manager"
+            UserId = "USER_ID2",
+            Role = "Player"
         };
         var permissions = await AddUser(user);
         var filter = Builders<User>.Filter.Eq(x => x.UserId, "USER_ID");
@@ -41,14 +69,15 @@ public class UsersUnitTests
         Assert.That(permissions, Is.EqualTo(expectedPermissions));
     }
 
-    public async Task<string[]> AddUser(UserFromBody userFromBody)
+    public async Task<string[]> AddUser(UserFromBodyInput userFromBody)
     {
         var permissions = await GetPermissionsFromRole(userFromBody.Role);
         var user = new User
         {
             UserId = userFromBody.UserId,
             Role = userFromBody.Role,
-            Permissions = permissions
+            Permissions = permissions,
+            Teams = []
         };
         await _usersCollection.InsertOneAsync(user);
         return permissions;
@@ -76,6 +105,21 @@ public class UsersUnitTests
         var permissions = _permissionsCollection.Find(permissionFilter).Project(projectName).ToList();
         var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();
         return permissionNames;
+    }
+
+    [Test]
+    public async Task Test_AddTeamIdToUser()
+    {
+        var userId = "USER_ID2";
+        var teamId = "team-id";
+        await AddTeamIdToUser(userId, teamId);
+    }
+    public async Task AddTeamIdToUser(string userId, string teamId)
+    {
+        Console.WriteLine("Received User ID:" + userId, "Received TeamID: " + teamId);
+        var filter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+        var update = Builders<User>.Update.AddToSet("Teams", teamId);
+        await _usersCollection.UpdateOneAsync(filter, update);
     }
 
     public static class EncryptionHelper

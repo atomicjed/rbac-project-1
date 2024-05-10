@@ -1,0 +1,38 @@
+<div hlmCard class="shadow-lg">
+  <div hlmCardHeader>
+    <h3 class="text-[1.3rem]" hlmCardTitle>Register a Team</h3>
+    <p class="w-90" hlmCardDescription>Fitness, pre-season, socials, more, all at the control of your fingertips</p>
+  </div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="pb-0 pt-[15px] gap-[15px] flex flex-col" hlmCardContent>
+        <label hlmLabel>Team Name
+          <input class="w-full" formControlName="teamName" appCodeValidator  hlmInput placeholder="Team Name" type="text">
+            <small *ngIf="form.get('teamName')?.errors?.['xss'] || form.get('teamName')?.errors?.['codeTag']"
+                   class="text-red-600 font-medium text-[0.8rem]">
+              *Team name contains potentially harmful script
+            </small>
+          <small *ngIf="form.get('teamName')?.errors?.['required'] && form.get('teamName')?.touched"
+                 class="text-red-600 font-medium text-[0.8rem]">
+            *Team name cannot be empty
+          </small>
+        </label>
+        <label hlmLabel>Standard of Football
+          <div class="pt-[5px]"><app-football-standard-dropdown (selectedStandard)="handleSelectedStandard($event)"></app-football-standard-dropdown></div>
+        </label>
+        <label hlmLabel>Age Group
+          <div class="pt-[5px]"><app-age-group-dropdown (selectedAgeGroup)="handleSelectedAgeGroup($event)"></app-age-group-dropdown></div>
+        </label>
+        <label hlmLabel>Pick your Colours
+          <div (click)="openColourPickerModal()" class="w-full py-4 border border-[#eee] rounded-md flex gap-3 mt-[5px] pl-4 hover:cursor-pointer hover:bg-gray-200 transition duration-300 ease-in-out">
+            <div *ngIf="primaryColour === '' && secondaryColour === ''">Pick your team's colour</div>
+            <div *ngIf="primaryColour !== ''" [ngStyle]="displayPrimaryColour()" class="w-6 h-6 rounded-full border border-[#eee]"></div>
+            <div *ngIf="secondaryColour !== ''" [ngStyle]="displaySecondaryColour()" class="w-6 h-6 rounded-full border border-[#eee]"></div>
+            <i *ngIf="primaryColour === '' && secondaryColour === ''" class="fa-solid fa-eye-dropper text-blue-800"></i>
+          </div>
+        </label>
+        <div class="pl-0 pt-2" hlmCardFooter>
+          <button [disabled]="!form.valid || primaryColour === '' || secondaryColour === '' || footballStandard === 10 || ageGroup === 10" class="text-green-300 bg-blue-800" hlmBtn id="signUpButton" type="submit">Register Team</button>
+        </div>
+      </div>
+  </form>
+</div>

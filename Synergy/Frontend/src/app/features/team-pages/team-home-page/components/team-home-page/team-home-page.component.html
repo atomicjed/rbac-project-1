@@ -1,0 +1,5 @@
+<div *ngFor="let team of teams">
+  <a [routerLink]="['/', team.urlSlug, 'invites']" class="text-blue-500 hover:text-orange-400">
+  <div>{{team.teamName}}</div>
+  </a>
+</div>

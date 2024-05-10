@@ -22,30 +22,32 @@
       "ES2022",
       "dom"
     ],
+    "baseUrl": "./src",
     "paths": {
+      "@app/*": ["app/*"],
       "@spartan-ng/ui-button-helm": [
-        "./src/components/ui-button-helm/src/index.ts"
+        "components/ui-button-helm/src/index.ts"
       ],
       "@spartan-ng/ui-input-helm": [
-        "./src/components/ui-input-helm/src/index.ts"
+        "components/ui-input-helm/src/index.ts"
       ],
       "@spartan-ng/ui-label-helm": [
-        "./src/components/ui-label-helm/src/index.ts"
+        "components/ui-label-helm/src/index.ts"
       ],
       "@spartan-ng/ui-popover-helm": [
-        "./src/components/ui-popover-helm/src/index.ts"
+        "components/ui-popover-helm/src/index.ts"
       ],
       "@spartan-ng/ui-command-helm": [
-        "./src/components/ui-command-helm/src/index.ts"
+        "components/ui-command-helm/src/index.ts"
       ],
       "@spartan-ng/ui-icon-helm": [
-        "./src/components/ui-icon-helm/src/index.ts"
+        "components/ui-icon-helm/src/index.ts"
       ],
       "@spartan-ng/ui-card-helm": [
-        "./src/components/ui-card-helm/src/index.ts"
+        "components/ui-card-helm/src/index.ts"
       ],
       "@spartan-ng/ui-menu-helm": [
-        "./src/components/ui-menu-helm/src/index.ts"
+        "components/ui-menu-helm/src/index.ts"
       ]
     }
   },

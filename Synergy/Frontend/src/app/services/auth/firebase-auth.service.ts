@@ -2,12 +2,15 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat";
 import {BehaviorSubject, map, Observable, Subscription, switchMap, tap} from "rxjs";
-import {GetUserPermissionsService} from "../api-requests/users/get-user-permissions.service";
+import {GetUserService} from "../api-requests/users/get-user.service";
 import {AddUserService} from "../api-requests/users/add-user.service";
+import {Store} from "@ngxs/store";
+import {UserActions} from "../../store/actions/user.action";
 
 interface User {
   userId: string,
   role: string,
+  permissions: string[]
 }
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,7 @@ export class FirebaseAuthService implements OnDestroy {
   isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
   private currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   currentUser$: Observable<any> = this.currentUserSubject.asObservable();
-  constructor(private afAuth: AngularFireAuth, private getUserPermissionsService: GetUserPermissionsService, private addUserService: AddUserService) {
+  constructor(private afAuth: AngularFireAuth, private getUserService: GetUserService, private store: Store) {
   }
 
   currentUserSubscription = this.afAuth.authState.pipe(
@@ -35,26 +38,23 @@ export class FirebaseAuthService implements OnDestroy {
   }
 
   login(email: string, password: string) {
-    this.afAuth.signInWithEmailAndPassword(email, password).then(userCredentials => {
-      if (userCredentials.user?.uid)
-        this.getUserPermissionsService.getUserPermissions(userCredentials.user?.uid);
-    })
-      .catch((error) => {
-        console.log("Incorrect email or password")
-      });
+    return this.afAuth.signInWithEmailAndPassword(email, password);
   }
   logout() {
     this.afAuth.signOut()
       .then(() => {
+        const removeUser: User = {
+          userId: '',
+          role: '',
+          permissions: []
+        }
+        this.store.dispatch(new UserActions.SetUser(removeUser))
       })
       .catch((error) => {
         console.log("error", error)
       });
   }
 
-  isAuthenticated(): Observable<boolean> {
-    return this.isAuthenticated$;
-  }
   getToken(): Promise<string | null> {
     return this.afAuth.currentUser.then(user => {
         if (user){

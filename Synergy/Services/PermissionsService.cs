@@ -18,11 +18,6 @@ public class PermissionsService
         _usersCollection = db.GetCollection<User>(databaseSettings.Value.UsersCollectionName);
     }
 
-    public async Task AddPermission(Permissions permission)
-    {
-        await _permissionsCollection.InsertOneAsync(permission);
-    }
-
     public async Task<string[]> GetPermissionsFromRole(string role)
     {
         var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, role);
@@ -30,11 +25,5 @@ public class PermissionsService
         var permissions = _permissionsCollection.Find(permissionFilter).Project(projectName).ToList();
         var permissionNames = permissions.Select(x => x["PermissionName"].AsString).ToArray();
         return permissionNames;
-    }
-    public async Task<string[]> GetUserPermissions(string userId)
-    {
-        var userFilter = Builders<User>.Filter.Eq(x => x.UserId, userId);
-        var user = await _usersCollection.Find(userFilter).FirstOrDefaultAsync();
-        return user.Permissions;
     }
 }

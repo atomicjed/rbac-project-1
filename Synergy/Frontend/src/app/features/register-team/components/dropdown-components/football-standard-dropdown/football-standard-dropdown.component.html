@@ -1,0 +1,31 @@
+<hlm-menu-bar class="w-full hover:cursor-pointer">
+  <button id="toggleButton" [brnMenuTriggerFor]="role" class="w-full gap-3 pl-3 hover:cursor-pointer" hlmMenuBarItem>{{ chosenStandard.name }}
+    <i class="{{chosenStandard.icon}} text-blue-800"></i>
+  </button>
+</hlm-menu-bar>
+
+<ng-template #role>
+  <hlm-menu class="w-[250px]" variant="menubar">
+    <hlm-menu-group class="w-full">
+      <button id="grassrootsButton" (click)="setToGrassroots()" class="text-black hover:cursor-pointer" hlmMenuItem>
+        Grassroots
+        <hlm-menu-shortcut></hlm-menu-shortcut>
+      </button>
+      <hlm-menu-separator/>
+      <button id="amateurButton" (click)="setToAmateur()" class="text-black hover:cursor-pointer" hlmMenuItem>
+        Amateur
+        <hlm-menu-shortcut></hlm-menu-shortcut>
+      </button>
+      <hlm-menu-separator/>
+      <button id="semiProfessionalButton" (click)="setToSemiProfessional()" class="text-black hover:cursor-pointer" hlmMenuItem>
+        Semi Professional
+        <hlm-menu-shortcut></hlm-menu-shortcut>
+      </button>
+      <hlm-menu-separator/>
+      <button id="professionalButton" (click)="setToProfessional()" class="text-black hover:cursor-pointer" hlmMenuItem>
+        Professional
+        <hlm-menu-shortcut><i class="fa-solid fa-user-tie text-blue-800"></i></hlm-menu-shortcut>
+      </button>
+    </hlm-menu-group>
+  </hlm-menu>
+</ng-template>

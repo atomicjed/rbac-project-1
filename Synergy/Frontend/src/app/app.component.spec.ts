@@ -6,13 +6,19 @@ import {InjectionToken} from "@angular/core";
 import {NavbarComponent} from "./features/layout/navbar/navbar.component";
 import {FirebaseAuthService} from "./services/auth/firebase-auth.service";
 import {MockFirebaseAuthService} from "../mocks/mock-firebase-auth";
+import {RouterModule} from "@angular/router";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {AppModule} from "./app.module";
+import {NgxsModule} from "@ngxs/store";
 
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterModule.forRoot([]),
+        HttpClientTestingModule,
+        NgxsModule.forRoot([])
       ],
       providers:[
         {provide: FirebaseAuthService, useClass: MockFirebaseAuthService}

@@ -1,7 +1,7 @@
 # Ignore node modules (dependencies)
 node_modules/
 
-angular/
+.angular
 
 # Ignore build output directory
 dist/
