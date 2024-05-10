@@ -18,11 +18,6 @@ public class PermissionsService
         _usersCollection = db.GetCollection<User>(databaseSettings.Value.UsersCollectionName);
     }
 
-    public async Task AddPermission(Permissions permission)
-    {
-        await _permissionsCollection.InsertOneAsync(permission);
-    }
-
     public async Task<string[]> GetPermissionsFromRole(string role)
     {
         var permissionFilter = Builders<Permissions>.Filter.AnyEq(x => x.Roles, role);

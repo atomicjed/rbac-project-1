@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FootballStandardDropdownComponent } from './football-standard-dropdown.component';
-import {SharedComponentsModule} from "../../../../../shared-components/shared-components.module";
+import {SharedComponentsModule} from "@app/shared-components/shared-components.module";
 
 describe('FootballStandardDropdownComponent', () => {
   let component: FootballStandardDropdownComponent;

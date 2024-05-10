@@ -7,6 +7,7 @@ namespace Synergy.Authorization;
 public static class Permissions
 {
     public const string CanRegisterTeam = "can-register-team";
+    public const string CanGenerateInviteCode = "can-generate-invite-code";
     public const string CanAssignTrainer = "can-assign-trainer";
     public const string CanCreatePlan = "can-create-plan";
     public const string CanJoinTeam = "can-join-team";

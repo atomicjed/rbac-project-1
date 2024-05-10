@@ -1,9 +1,6 @@
 <hlm-menu-bar class="w-full hover:cursor-pointer">
-  <button id="toggleButton" [brnMenuTriggerFor]="role" class="w-full gap-3 pl-3 hover:cursor-pointer" hlmMenuBarItem>{{ chosenStandard }}
-    <i
-    *ngIf="chosenStandard !== 'Professional'" class="fa-solid fa-futbol text-blue-800"></i>
-    <i
-      *ngIf="chosenStandard === 'Professional'" class="fa-solid fa-user-tie text-blue-800"></i>
+  <button id="toggleButton" [brnMenuTriggerFor]="role" class="w-full gap-3 pl-3 hover:cursor-pointer" hlmMenuBarItem>{{ chosenStandard.name }}
+    <i class="{{chosenStandard.icon}} text-blue-800"></i>
   </button>
 </hlm-menu-bar>
 

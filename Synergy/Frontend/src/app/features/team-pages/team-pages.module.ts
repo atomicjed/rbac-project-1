@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {TeamHomePageComponent} from "./team-home-page/components/team-home-page/team-home-page.component";
-import {AppRoutingModule} from "../../app-routing.module";
+import {AppRoutingModule} from "@app/app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {SharedComponentsModule} from "../../shared-components/shared-components.module";
+import {SharedComponentsModule} from "@app/shared-components/shared-components.module";
 import {TeamInvitePageComponent} from "./team-invite-pages/components/team-invite-page/team-invite-page.component";
 import {AcceptInvitePageComponent} from "./accept-invite-page/accept-invite-page.component";
 import {

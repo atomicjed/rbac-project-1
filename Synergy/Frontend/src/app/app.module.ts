@@ -16,7 +16,6 @@ import {RegisterTeamModule} from "./features/register-team/register-team.module"
 import {NgxsModule} from "@ngxs/store";
 import {NgxsReduxDevtoolsPluginModule} from "@ngxs/devtools-plugin";
 import {UserState} from "./store/states/user.state";
-import { TeamHomePageComponent } from './features/team-pages/team-home-page/components/team-home-page/team-home-page.component';
 import {TeamPagesModule} from "./features/team-pages/team-pages.module";
 import {TeamsState} from "./store/states/teams.state";
 import { provideFirestore, getFirestore} from "@angular/fire/firestore";

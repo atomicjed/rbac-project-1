@@ -3,13 +3,13 @@ import {Validators} from "@angular/forms";
 import {Select} from "@ngxs/store";
 import {catchError, from, Observable, of, Subscription, switchMap, tap} from "rxjs";
 import {Router} from "@angular/router";
-import {UserStateModel} from "../../../../../store/states/user.state";
-import {User} from "../../../../../store/actions/user.action";
-import {FirebaseAuthService} from "../../../../../services/auth/firebase-auth.service";
-import {CustomFormBuilder} from "../../../../../shared-components/custom-form-group/custom-form-group";
-import {GetUserService} from "../../../../../services/api-requests/users/get-user.service";
-import {DeleteInviteCodeService} from "../../../../../services/api-requests/random-codes/delete-invite-code.service";
-import {AddUserToTeamService} from "../../../../../services/api-requests/teams/add-user-to-team.service";
+import {UserStateModel} from "@app/store/states/user.state";
+import {User} from "@app/store/actions/user.action";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
+import {GetUserService} from "@app/services/api-requests/users/get-user.service";
+import {DeleteInviteCodeService} from "@app/services/api-requests/random-codes/delete-invite-code.service";
+import {AddUserToTeamService} from "@app/services/api-requests/teams/add-user-to-team.service";
 
 interface AddUserToTeamBody {
   userId: string,
@@ -54,7 +54,7 @@ export class AcceptInviteSignInComponent implements OnDestroy {
       .pipe(
         switchMap(userCredentials => {
           if (userCredentials.user?.uid) {
-            return this.getUserService.getUserInfo(userCredentials.user?.uid);
+            return this.getUserService.getUserAndUpdateStore(userCredentials.user?.uid);
           }
 
           throw new Error('No User id!');

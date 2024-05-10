@@ -21,20 +21,6 @@ public class UsersService
         _encryptionService = new EncryptionService();
         _permissionsService = new PermissionsService(databaseSettings);
     }
-
-    public async Task<string> AddUser(UserFromBody userFromBody)
-    {
-        var permissions = await _permissionsService.GetPermissionsFromRole(userFromBody.Role);
-        var user = new User
-        {
-            UserId = userFromBody.UserId,
-            Role = userFromBody.Role,
-            Permissions = permissions,
-            Teams = []
-        };
-        await _usersCollection.InsertOneAsync(user);
-        return userFromBody.UserId;
-    }
     
     public async Task<User> GetUserInfo(string userId)
     {
@@ -48,24 +34,5 @@ public class UsersService
         var filter = Builders<User>.Filter.Eq(x => x.UserId, userId);
         var update = Builders<User>.Update.AddToSet("Teams", teamId);
         await _usersCollection.UpdateOneAsync(filter, update);
-    }
-
-    public async Task<User> GetUser(string userId)
-    {
-        var dbUser = await _usersCollection.Find(x => x.UserId == userId).FirstOrDefaultAsync();
-        var user = new User
-        {
-            UserId = dbUser.UserId,
-            Role = dbUser.Role
-        };
-        return user;
-    }
-
-    public record UserInfo
-    {
-        public string UserId { get; set; } = null!;
-        public string Role { get; set; } = null!;
-        public string[] Permissions { get; set; } = null!;
-        public string[]? Teams { get; set; }
     }
 }

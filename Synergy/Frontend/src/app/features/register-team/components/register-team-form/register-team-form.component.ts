@@ -1,13 +1,12 @@
 import {Component, OnDestroy} from '@angular/core';
-import {CustomFormBuilder} from "../../../../shared-components/custom-form-group/custom-form-group";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
 import {FormGroup, Validators} from "@angular/forms";
-import {RegisterTeamService} from "../../../../services/api-requests/teams/register-team.service";
+import {RegisterTeamService} from "@app/services/api-requests/teams/register-team.service";
 import {catchError, Observable, tap} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {ColourPickerModalComponent} from "../colour-picker-modal/colour-picker-modal.component";
-import {FirebaseAuthService} from "../../../../services/auth/firebase-auth.service";
 import {Select} from "@ngxs/store";
-import {UserStateModel} from "../../../../store/states/user.state";
+import {UserStateModel} from "@app/store/states/user.state";
 import {Router} from "@angular/router";
 
 interface Team {

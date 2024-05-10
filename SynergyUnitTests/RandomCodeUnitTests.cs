@@ -6,7 +6,7 @@ namespace SynergyUnitTests;
 public class RandomCodeUnitTests
 {
     private IMongoDatabase _testDatabase;
-    private IMongoCollection<RandomCodes> _randomCodesCollection;
+    private IMongoCollection<UserInviteCodes> _randomCodesCollection;
     private static Random _random = new Random();
 
     [SetUp]
@@ -14,7 +14,7 @@ public class RandomCodeUnitTests
     {
         var client = new MongoClient("mongodb://localhost:27017");
         _testDatabase = client.GetDatabase("SynergyTest");
-        _randomCodesCollection = _testDatabase.GetCollection <RandomCodes>("RandomCodesTest");
+        _randomCodesCollection = _testDatabase.GetCollection <UserInviteCodes>("RandomCodesTest");
     }
     
     [Test]
@@ -28,7 +28,7 @@ public class RandomCodeUnitTests
     public async Task<string> GenerateRandomCodeInvite(string teamId)
     {
         var randomCode = GenerateRandomCode(10);
-        var randomCodeObject = new RandomCodes
+        var randomCodeObject = new UserInviteCodes
         {
             RandomCode = randomCode,
             TeamId = teamId
@@ -53,7 +53,7 @@ public class RandomCodeUnitTests
     [Test]
     public async Task Test_ValidateInviteCode()
     {
-        var reqBody = new RandomCodes
+        var reqBody = new UserInviteCodes
         {
             RandomCode = "P3lxQ8zkgT",
             TeamId = "TEAM_ID"
@@ -62,9 +62,9 @@ public class RandomCodeUnitTests
         Assert.That(result, Is.EqualTo(true));
     }
 
-    public async Task<bool> ValidateInviteCode(RandomCodes body)
+    public async Task<bool> ValidateInviteCode(UserInviteCodes body)
     {
-        var filter = Builders<RandomCodes>.Filter.Eq(x => x.RandomCode, body.RandomCode);
+        var filter = Builders<UserInviteCodes>.Filter.Eq(x => x.RandomCode, body.RandomCode);
         var codeDoc = await _randomCodesCollection.Find(filter).FirstOrDefaultAsync();
         return codeDoc != null && codeDoc.TeamId == body.TeamId;
     }
@@ -75,14 +75,14 @@ public class RandomCodeUnitTests
         var inviteCode = "KgmP3YdFbi";
         await DeleteInviteCode(inviteCode);
         
-        var filter = Builders<RandomCodes>.Filter.Eq(x => x.RandomCode, inviteCode);
+        var filter = Builders<UserInviteCodes>.Filter.Eq(x => x.RandomCode, inviteCode);
         var inviteCodeDoc = await _randomCodesCollection.Find(filter).FirstOrDefaultAsync();
         Assert.That(inviteCodeDoc, Is.Null);
     }
 
     public async Task DeleteInviteCode(string inviteCode)
     {
-        var filter = Builders<RandomCodes>.Filter.Eq(x => x.RandomCode, inviteCode);
+        var filter = Builders<UserInviteCodes>.Filter.Eq(x => x.RandomCode, inviteCode);
         await _randomCodesCollection.DeleteOneAsync(filter);
     }
 }

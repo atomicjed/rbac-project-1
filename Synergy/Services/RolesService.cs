@@ -20,9 +20,4 @@ public class RolesService
     {
         await _rolesCollection.InsertOneAsync(role);
     }
-
-    public async Task<Roles> GetRole(string roleName)
-    {
-        return await _rolesCollection.Find(x => x.RoleName == roleName).FirstOrDefaultAsync();
-    }
 }

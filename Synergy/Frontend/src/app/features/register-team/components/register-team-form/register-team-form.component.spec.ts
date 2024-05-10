@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterTeamFormComponent } from './register-team-form.component';
-import {CustomFormBuilder} from "../../../../shared-components/custom-form-group/custom-form-group";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {RegisterTeamModule} from "../../register-team.module";
-import {FirebaseAuthService} from "../../../../services/auth/firebase-auth.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
 import {MockFirebaseAuthService} from "../../../../../mocks/mock-firebase-auth";
 import {RouterModule} from "@angular/router";
 import {NgxsModule} from "@ngxs/store";

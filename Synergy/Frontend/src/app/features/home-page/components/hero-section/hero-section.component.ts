@@ -2,7 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {Select} from "@ngxs/store";
-import {UserStateModel} from "../../../../store/states/user.state";
+import {UserStateModel} from "@app/store/states/user.state";
 
 interface User {
   userId: string,

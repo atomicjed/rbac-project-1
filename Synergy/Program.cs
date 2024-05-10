@@ -7,8 +7,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Synergy.Configurations;
+using Synergy.ExceptionHandling;
 using Synergy.Models;
 using Synergy.Services;
+using Synergy.Validators;
+using Synergy.Validators.TeamValidators;
+using Synergy.Validators.UserInviteCodeValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,8 +95,20 @@ builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<EncryptionService>();
 builder.Services.AddScoped<PermissionsService>();
 builder.Services.AddScoped<RolesService>();
-builder.Services.AddScoped<TeamsService>();
 builder.Services.AddScoped<RandomCodeService>();
+builder.Services.AddScoped<RegisterTeamInputValidator>();
+builder.Services.AddScoped<AddUserToTeamInputValidator>();
+builder.Services.AddScoped<PermissionsValidator>();
+builder.Services.AddScoped<RolesValidator>();
+builder.Services.AddScoped<UserInviteCodeValidator>();
+builder.Services.AddScoped<TeamIdInputValidator>();
+builder.Services.AddScoped<DeleteInviteCodeInputValidator>();
+builder.Services.AddScoped<UserValidator>();
+builder.Services.AddScoped<UserIdInputValidator>();
+builder.Services.AddScoped<UserFromBodyInputValidator>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -123,5 +139,6 @@ app.UseHangfireDashboard();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseExceptionHandler();
 
 app.Run();

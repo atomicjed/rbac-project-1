@@ -1,11 +1,11 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Validators} from "@angular/forms";
-import {AddUserService} from "../../../services/api-requests/users/add-user.service";
-import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
-import {GetUserService} from "../../../services/api-requests/users/get-user.service";
+import {AddUserService} from "@app/services/api-requests/users/add-user.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
+import {GetUserService} from "@app/services/api-requests/users/get-user.service";
 import {catchError, from, switchMap, tap} from "rxjs";
 import {Router} from "@angular/router";
-import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
 
 interface NewUser {
   userId: string,
@@ -20,6 +20,7 @@ interface NewUser {
 export class CreateAccountPageComponent implements OnDestroy {
   user: any;
   role: string = '';
+  error: boolean = false;
   form = this.customFormBuilder.group({
     email: ['', [Validators.required]],
     password: ['', [Validators.required]],
@@ -51,11 +52,12 @@ export class CreateAccountPageComponent implements OnDestroy {
           throw new Error('No user ID!');
       }),
       tap(response => {
-        this.getUserService.getUserInfo(response.userId);
+        this.getUserService.getUserAndUpdateStore(response.userId).subscribe();
         this.router.navigate([""]).then();
       }),
       catchError(error => {
         console.log("Error creating account:", error);
+        this.error = true;
         throw error;
       })
     ).subscribe();

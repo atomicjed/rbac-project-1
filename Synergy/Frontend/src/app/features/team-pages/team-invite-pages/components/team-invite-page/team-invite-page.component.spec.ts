@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TeamInvitePageComponent } from './team-invite-page.component';
 import {TeamPagesModule} from "../../../team-pages.module";
-import {CustomFormBuilder} from "../../../../../shared-components/custom-form-group/custom-form-group";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {FirebaseAuthService} from "../../../../../services/auth/firebase-auth.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
 import {MockFirebaseAuthService} from "../../../../../../mocks/mock-firebase-auth";
 import {AngularFirestore, AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import {BehaviorSubject} from "rxjs";

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterTeamPageComponent } from './register-team-page.component';
 import {RegisterTeamModule} from "../../register-team.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {FirebaseAuthService} from "../../../../services/auth/firebase-auth.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
 import {MockFirebaseAuthService} from "../../../../../mocks/mock-firebase-auth";
 import {NgxsModule} from "@ngxs/store";
 

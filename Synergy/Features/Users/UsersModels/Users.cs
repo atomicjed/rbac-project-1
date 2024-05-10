@@ -12,13 +12,6 @@ public enum RolesOptions
     PersonalTrainer
 }
 
-public record UserFromBody
-{
-    public string? Id { get; set; }
-    public string UserId { get; set; } = null!;
-    public string Role { get; set; } = null!;
-}
-
 public record User
 {
     [BsonId]

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {catchError, Subscription, tap} from "rxjs";
-import {ValidateInviteCodeService} from "../../../services/api-requests/random-codes/validate-invite-code.service";
+import {ValidateInviteCodeService} from "@app/services/api-requests/random-codes/validate-invite-code.service";
 
 interface ValidateInviteCodeBody {
   randomCode: string,

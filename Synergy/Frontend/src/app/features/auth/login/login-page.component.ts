@@ -2,9 +2,9 @@ import {Component, OnDestroy} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import firebase from "firebase/compat";
 import User = firebase.User;
-import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
-import {CustomFormBuilder} from "../../../shared-components/custom-form-group/custom-form-group";
-import {GetUserService} from "../../../services/api-requests/users/get-user.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
+import {GetUserService} from "@app/services/api-requests/users/get-user.service";
 
 @Component({
   selector: 'app-login-page',
@@ -36,7 +36,7 @@ export class LoginPageComponent implements OnDestroy {
     this.firebaseAuthService.login(email, password).then(userCredentials => {
       if (userCredentials.user?.uid)
       {
-        this.getUserService.getUserInfo(userCredentials.user?.uid);
+        this.getUserService.getUserAndUpdateStore(userCredentials.user?.uid).subscribe();
       }
     });
   }

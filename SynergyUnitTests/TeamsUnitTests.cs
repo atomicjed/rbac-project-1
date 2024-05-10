@@ -1,7 +1,9 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Synergy.Features.Teams.TeamControllers;
 using Synergy.Models;
 using Synergy.Services;
+using Synergy.Validators.TeamValidators;
 
 namespace SynergyUnitTests;
 
@@ -9,6 +11,7 @@ public class TeamsUnitTests
 {
     private IMongoDatabase _testDatabase;
     private IMongoCollection<Teams> _teamsCollection;
+    private RegisterTeamInputValidator _validator;
     
     [SetUp]
     public void Setup()
@@ -16,6 +19,7 @@ public class TeamsUnitTests
         var client = new MongoClient("mongodb://localhost:27017");
         _testDatabase = client.GetDatabase("SynergyTest");
         _teamsCollection = _testDatabase.GetCollection<Teams>("TeamsTest");
+        _validator = new RegisterTeamInputValidator();
     }
 
     [Test]
@@ -43,7 +47,7 @@ public class TeamsUnitTests
     [Test]
     public async Task Test_AddUserToTeam()
     {
-        var body = new AddUserToTeamBody
+        var body = new AddUserToTeamInput()
         {
             UserId = "Player3",
             Role = "Player",
@@ -56,7 +60,7 @@ public class TeamsUnitTests
         Assert.That(team.Players.Contains(body.UserId), Is.EqualTo(true));
     }
 
-    public async Task AddUserToTeam(AddUserToTeamBody body)
+    public async Task AddUserToTeam(AddUserToTeamInput body)
     {
         string field = body.Role switch
         {
@@ -68,5 +72,17 @@ public class TeamsUnitTests
         var filter = Builders<Teams>.Filter.Eq(x => x.Id, body.TeamId);
         var update = Builders<Teams>.Update.AddToSet($"{field}", body.UserId);
         await _teamsCollection.UpdateOneAsync(filter, update);
+    }
+
+    [Test]
+    public async Task Test_TegisterTeamInputValidator_ShouldReturnError()
+    {
+        var invalidInput = new RegisterTeamInput
+        {
+            UserId = "j$",
+            Team = new Teams()
+        };
+        var validationResult = _validator.Validate(invalidInput);
+        Assert.That(validationResult.IsValid, Is.False);
     }
 }

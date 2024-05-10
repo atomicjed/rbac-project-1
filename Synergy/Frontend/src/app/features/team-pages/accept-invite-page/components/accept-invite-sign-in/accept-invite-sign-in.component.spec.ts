@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AcceptInviteSignInComponent } from './accept-invite-sign-in.component';
-import {FirebaseAuthService} from "../../../../../../../services/auth/firebase-auth.service";
-import {MockFirebaseAuthService} from "../../../../../../../../mocks/mock-firebase-auth";
-import {CustomFormBuilder} from "../../../../../../../shared-components/custom-form-group/custom-form-group";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {AddUserService} from "../../../../../../../services/api-requests/users/add-user.service";
 import {NgxsModule, Store} from "@ngxs/store";
-import {TeamPagesModule} from "../../../../../team-pages.module";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
+import {MockFirebaseAuthService} from "../../../../../../mocks/mock-firebase-auth";
+import {TeamPagesModule} from "@app/features/team-pages/team-pages.module";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
+import {AddUserService} from "@app/services/api-requests/users/add-user.service";
 
 describe('AcceptInviteSignInComponent', () => {
   let component: AcceptInviteSignInComponent;

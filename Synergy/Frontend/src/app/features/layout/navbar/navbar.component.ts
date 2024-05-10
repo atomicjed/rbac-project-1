@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import firebase from "firebase/compat";
 import User = firebase.User;
-import {FirebaseAuthService} from "../../../services/auth/firebase-auth.service";
+import {FirebaseAuthService} from "@app/services/auth/firebase-auth.service";
 import {Router} from "@angular/router";
 
 @Component({

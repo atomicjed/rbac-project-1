@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {CustomFormBuilder} from "../../../../shared-components/custom-form-group/custom-form-group";
+import {CustomFormBuilder} from "@app/shared-components/custom-form-group/custom-form-group";
 import {FormGroup} from "@angular/forms";
 
 interface TeamColours {

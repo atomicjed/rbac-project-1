@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {NavbarComponent} from "./navbar/navbar.component";
 import {RouterLink} from "@angular/router";
-import {SharedComponentsModule} from "../../shared-components/shared-components.module";
+import {SharedComponentsModule} from "@app/shared-components/shared-components.module";
 
 
 

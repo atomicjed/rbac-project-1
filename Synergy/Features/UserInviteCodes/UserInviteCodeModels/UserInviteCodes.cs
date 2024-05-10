@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Synergy.Models;
 
-public record RandomCodes
+public record UserInviteCodes
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

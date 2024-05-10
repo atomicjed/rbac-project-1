@@ -45,7 +45,7 @@ export class TeamHomePageComponent implements OnDestroy {
 
   constructor(private getUserService: GetUserService) {
     if (this.user?.userId)
-      this.getUserService.getUserInfo(this.user?.userId)
+      this.getUserService.getUserAndUpdateStore(this.user?.userId).subscribe();
   }
 
   ngOnDestroy() {

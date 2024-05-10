@@ -1,2 +1,7 @@
-<app-hero-section *ngIf="userId && userId !== ''"></app-hero-section>
-<app-login-page *ngIf="!userId || userId === ''"></app-login-page>
+<ng-template #notLoggedIn>
+  <app-login-page></app-login-page>
+</ng-template>
+
+<ng-container *ngIf="userId$ | async as userId; else notLoggedIn">
+  <app-hero-section></app-hero-section>
+</ng-container>

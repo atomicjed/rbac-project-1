@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {API_ROOT} from "../../../../constants/constants";
-import {BehaviorSubject, catchError, map, switchMap, tap} from "rxjs";
+import {BehaviorSubject, catchError, tap} from "rxjs";
 import {Store} from "@ngxs/store";
-import {UserActions} from "../../../store/actions/user.action";
+import {UserActions} from "@app/store/actions/user.action";
 import {GetTeamsService} from "../teams/get-teams.service";
-import {Team, TeamsActions} from "../../../store/actions/teams.action";
 
 interface User {
   userId: string,
@@ -19,8 +18,6 @@ interface User {
 export class GetUserService {
   private userPermissionBehaviorSubject = new BehaviorSubject<string[]>([]);
   permissions$ = this.userPermissionBehaviorSubject.asObservable();
-  private userRoleBehaviorSubject = new BehaviorSubject<string>('');
-  role$ = this.userRoleBehaviorSubject.asObservable();
 
   constructor(private http: HttpClient, private store: Store, private getTeamsService: GetTeamsService) { }
 
@@ -29,7 +26,11 @@ export class GetUserService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post<User>(url, {userId}, { headers, withCredentials: true }).pipe(
+    return this.http.post<User>(url, {userId}, { headers, withCredentials: true })
+  }
+
+  getUserAndUpdateStore(userId: string) {
+    return this.getUserInfo(userId).pipe(
       tap(user => {
         const storeUser : User = {
           userId: user.userId,
@@ -38,14 +39,14 @@ export class GetUserService {
           teams: user.teams
         }
         this.store.dispatch(new UserActions.SetUser(storeUser));
-        this.getTeamsService.getTeams(user.teams);
+        if (user.teams)
+          this.getTeamsService.getTeamsAndUpdateStore(user.teams);
         const permissionsArray = Object.values(user.permissions);
         this.userPermissionBehaviorSubject.next(permissionsArray);
-        this.userRoleBehaviorSubject.next(user.role);
       }),
       catchError(error => {
-        console.log("Error whilst getting permissions:", error);
-        throw error;
+          console.log("Error whilst getting permissions:", error);
+          throw error;
         }
       )
     )

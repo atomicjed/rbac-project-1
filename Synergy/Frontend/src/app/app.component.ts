@@ -13,7 +13,7 @@ export class AppComponent implements OnDestroy {
   constructor(private firebaseAuthService: FirebaseAuthService, private getUserService: GetUserService) {
     this.userSubscription = this.firebaseAuthService.currentUser$.subscribe(user => {
       if(user)
-        this.getUserService.getUserInfo(user.uid).subscribe();
+        this.getUserService.getUserAndUpdateStore(user.uid).subscribe();
     })
   }
 
